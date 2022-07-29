@@ -2,6 +2,19 @@ export interface Ticker{
   symbol: string,
   name: string
 }
+
+export interface SeriesPoint{
+  time: string,
+  data: any
+}
+
+export interface SeriesData{
+  latest: SeriesPoint,
+  previous: SeriesPoint,
+}
+
+export const INTERVAL = "1min"
+
 export const VALID: Ticker[] = [
   {
     symbol: 'MSFT',

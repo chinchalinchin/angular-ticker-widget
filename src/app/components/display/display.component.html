@@ -1,9 +1,17 @@
-<section>
+<section *ngIf="!loading && latestPoint && previousPoint">
     <h1 class="mat-headline">{{tickerName}} ({{ticker}})</h1>
     <h2 class="mat-display-3">
-        Current Price
-        <span class="mat-display-1" style="margin-left: 2.5%;">Change Percent</span>
-        <div class="mat-caption">As of current time</div>
+        {{ getLatestPrice() }}
+        <span 
+            class="mat-display-1" 
+            style="margin-left: 2.5%;"
+            [ngStyle] = "{
+                'color': getLatestPercentChange() > 0 ? 'green': 'red'
+            }"
+        >
+            {{ getLatestPercentChange() | percent : '1.3-5'}}
+        </span>
+        <div class="mat-caption">As of {{latestPoint.time}}</div>
     </h2>
 
     <div style="display: flex; flex-direction: column; width: 100%;">
@@ -13,7 +21,7 @@
                 Range
             </div> 
             <div>
-                Value
+                {{getLatestHigh()}} - {{getLatestLow()}}
             </div>
         </div>
         <mat-divider></mat-divider>
@@ -22,7 +30,7 @@
                 Open
             </div> 
             <div>
-                Value
+                {{getLatestOpen()}}
             </div>
         </div>
         <mat-divider></mat-divider>
@@ -31,7 +39,7 @@
                 Volume
             </div> 
             <div>
-                Value
+                {{getLatestVolume()}}
             </div>
         </div>
         <mat-divider></mat-divider>
@@ -46,3 +54,5 @@
         <mat-divider></mat-divider>
     </div>
 </section>
+
+<mat-progress-bar *ngIf="loading" mode="buffer"></mat-progress-bar>

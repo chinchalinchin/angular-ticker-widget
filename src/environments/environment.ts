@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  // demo key, will only allow 5 requests a minute
+  apiKey: 'XXXXXX'
 };
 
 /*
