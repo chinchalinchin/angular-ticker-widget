@@ -1,27 +1,27 @@
-<section *ngIf="!loading && latestPoint && previousPoint">
-    <h1 class="mat-headline">{{tickerName}} ({{ticker}})</h1>
-    <h2 class="mat-display-3">
-        {{ getLatestPrice() }}
+<section *ngIf="!loading && latestQuote">
+    <h1 class="mat-headline" style="margin-left: 2.5%;">{{tickerName}} ({{ticker}})</h1>
+    <h2 class="mat-display-3" style="margin-left: 2.5%;">
+        {{ latestQuote.price }}
         <span 
             class="mat-display-1" 
             style="margin-left: 2.5%;"
             [ngStyle] = "{
-                'color': getLatestPercentChange() > 0 ? 'green': 'red'
+                'color': latestQuote.change > 0 ? 'green': 'red'
             }"
         >
-            {{ getLatestPercentChange() | percent : '1.3-5'}}
+            {{ latestQuote.change | number: '1.2'}} ({{ latestQuote.percent }})
         </span>
-        <div class="mat-caption">As of {{latestPoint.time}}</div>
+        <div class="mat-caption"  style="margin-left: 2.5%;">As of {{ getTime | date: 'medium' }}</div>
     </h2>
 
-    <div style="display: flex; flex-direction: column; width: 100%;">
+    <div style="display: flex; flex-direction: column; width: 90%; margin-left: 5%;">
         <mat-divider></mat-divider>
         <div style="display: flex; flex-direction: row; justify-content: space-between;">
             <div>
                 Range
             </div> 
             <div>
-                {{getLatestHigh()}} - {{getLatestLow()}}
+                <strong>{{ latestQuote.high | number: '1.2' }} - {{ latestQuote.low | number: '1.2'}}</strong>
             </div>
         </div>
         <mat-divider></mat-divider>
@@ -30,7 +30,7 @@
                 Open
             </div> 
             <div>
-                {{getLatestOpen()}}
+                <strong>{{ latestQuote.open | number: '1.2' }}</strong>
             </div>
         </div>
         <mat-divider></mat-divider>
@@ -39,16 +39,20 @@
                 Volume
             </div> 
             <div>
-                {{getLatestVolume()}}
+                <strong>{{ latestQuote.volume/1000000  | number: '1.2' }}M</strong>
             </div>
         </div>
         <mat-divider></mat-divider>
-        <div style="display: flex; flex-direction: row; justify-content: space-between;">
+        <div style="display: flex; flex-direction: row; justify-content: space-between;"
+            >
             <div>
                 Market Cap
             </div> 
-            <div>
-                Value
+            <div *ngIf="latestMarketCap">
+                <strong> {{ latestMarketCap/1000000000 | number: '1.2' }}B</strong>
+            </div>
+            <div *ngIf="!latestMarketCap">
+                <strong>Unable to locate</strong>
             </div>
         </div>
         <mat-divider></mat-divider>

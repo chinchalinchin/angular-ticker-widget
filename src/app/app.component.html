@@ -1,5 +1,5 @@
 <main>
-  <form>
+  <form style="margin-left: 2.5%">
     <mat-form-field>
       <input 
         matInput
@@ -12,6 +12,7 @@
       >
       <mat-autocomplete 
         #auto="matAutocomplete"
+        (optionSelected) = "search()"
       >
         <mat-option 
           *ngFor="let ticker of validTickers" 
@@ -41,6 +42,5 @@
   </form>
   
   <mat-divider ></mat-divider>
-  
-  <router-outlet></router-outlet>  
 </main>
+<router-outlet></router-outlet>  

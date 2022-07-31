@@ -3,17 +3,20 @@ export interface Ticker{
   name: string
 }
 
-export interface SeriesPoint{
-  time: string,
-  data: any
+export interface Quote{
+  open: number,
+  high: number,
+  low: number, 
+  price: number,
+  volume: number,
+  previous: number,
+  change: number,
+  percent: number
 }
 
-export interface SeriesData{
-  latest: SeriesPoint,
-  previous: SeriesPoint,
+export interface Meta{
+  market_cap: number
 }
-
-export const INTERVAL = "1min"
 
 export const VALID: Ticker[] = [
   {
@@ -29,7 +32,7 @@ export const VALID: Ticker[] = [
     name: 'IHS Market'
   },
   {
-    symbol: 'BRKA',
+    symbol: 'BRK.A',
     name: 'Berkshire Hathaway'
   },
   {

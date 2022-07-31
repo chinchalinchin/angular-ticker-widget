@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { 
+  Component, 
+  OnInit
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SeriesData, SeriesPoint } from 'src/config';
+import { Meta, Quote } from 'src/config';
 import { TickerService } from 'src/services/ticker.service';
 
 @Component({
@@ -8,58 +11,42 @@ import { TickerService } from 'src/services/ticker.service';
   templateUrl: './display.component.html',
   styleUrls: ['./display.component.css']
 })
-export class DisplayComponent implements OnInit {
+export class DisplayComponent {
 
   public loading: boolean = false;
   public ticker: string | null | undefined;
   public tickerName: string | null | undefined;
 
-  public previousPoint?: SeriesPoint;
-  public latestPoint?: SeriesPoint;
+  public latestQuote?: Quote;
+  public latestMarketCap?: number;
+  public getTime?: Date;
 
   constructor(
     private route: ActivatedRoute, 
     private tickers: TickerService
   ) { 
-    this.ticker = this.route.snapshot.paramMap.get('ticker')
-    this.tickerName = this.tickers.getTickerName(this.ticker)
+    this.route.params.subscribe(
+      params => {
+          this.ticker = params['ticker'];
+          this.tickerName = this.tickers.getTickerName(this.ticker)
+          this.init()
+      }
+  );
   }
 
-  ngOnInit(): void {
+  public init(): void {
     if(this.ticker){
       this.loading = true;
-      this.tickers.getLatestData(this.ticker).subscribe((data: SeriesData)=>{
-        this.previousPoint = data.previous;
-        this.latestPoint = data.latest;
-        console.log(this.latestPoint)
-        console.log(this.previousPoint)
-        this.loading = false;
+      this.tickers.getLatestData(this.ticker).subscribe((data: Quote)=>{
+        this.getTime = new Date();
+        this.latestQuote = data;
+        if(this.loading){ this.loading = false; }
+      })
+      this.tickers.getLatestMeta(this.ticker).subscribe((data:Meta)=>{
+        this.latestMarketCap = data.market_cap;
+        if(this.loading){ this.loading = false; }
       })
     }
-  }
-
-  public getLatestPrice(): number | null | undefined{
-    return this.latestPoint?.data["4. close"]
-  }
-
-  public getLatestPercentChange(){
-    return (this.latestPoint?.data["4. close"] - this.previousPoint?.data["4. close"])/this.previousPoint?.data["4. close"]
-  }
-
-  public getLatestOpen(){
-    return this.latestPoint?.data["1. open"]
-  }
-
-  public getLatestHigh(){
-    return this.latestPoint?.data["2. high"]
-  }
-
-  public getLatestLow(){
-    return this.latestPoint?.data["3. low"]
-  }
-
-  public getLatestVolume(){
-    return this.latestPoint?.data["5. volume"]
   }
 
 }

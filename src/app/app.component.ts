@@ -32,6 +32,10 @@ export class AppComponent {
 
   public search(): void{
     this.autoComplete.closePanel()
-    this.router.navigate(['search', this.searchControl.value])
+    this.router.navigateByUrl(`search/${this.searchControl.value}`)
+  }
+
+  public clear(): void{
+    this.router.navigateByUrl('')
   }
 }
